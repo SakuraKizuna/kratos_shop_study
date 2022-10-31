@@ -1,3 +1,0 @@
-consul:
-  address: 192.168.33.131:8500
-  scheme: http
