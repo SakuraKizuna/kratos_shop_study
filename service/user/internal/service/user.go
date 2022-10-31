@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"go.opentelemetry.io/otel"
 	v1 "user/api/user/v1"
 	"user/internal/biz"
 
@@ -33,6 +34,30 @@ func (u *UserService) CreateUser(ctx context.Context, req *v1.CreateUserInfo) (*
 
 	userInfoRsp := UserResponse(user)
 	return &userInfoRsp, nil
+}
+
+func (u *UserService) GetUserByMobile(ctx context.Context, req *v1.MobileRequest) (*v1.UserInfoResponse, error) {
+	tr := otel.Tracer("user service")
+	ctx, span := tr.Start(ctx, "GetUserByMobile service")
+	defer span.End()
+	user, err := u.uc.UserByMobile(ctx, req.Mobile)
+	if err != nil {
+		return nil, err
+	}
+	rsp := UserResponse(user)
+	return &rsp, nil
+}
+
+// CheckPassword .
+func (u *UserService) CheckPassword(ctx context.Context, req *v1.PasswordCheckInfo) (*v1.CheckResponse, error) {
+	tr := otel.Tracer("service")
+	ctx, span := tr.Start(ctx, "check user  password")
+	defer span.End()
+	check, err := u.uc.CheckPassword(ctx, req.Password, req.EncryptedPassword)
+	if err != nil {
+		return nil, err
+	}
+	return &v1.CheckResponse{Success: check}, nil
 }
 
 func UserResponse(user *biz.User) v1.UserInfoResponse {

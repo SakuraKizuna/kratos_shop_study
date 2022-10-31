@@ -25,7 +25,7 @@ var (
 	// Name is the name of the compiled software.
 	Name = "shop.user.service"
 	// Version is the version of the compiled software.
-	Version string
+	Version = "shop.user.service.v1"
 	// flagconf is the config flag.
 	flagconf string
 

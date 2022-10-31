@@ -8,6 +8,7 @@ import (
 	"github.com/go-kratos/kratos/v2/errors"
 	"github.com/go-kratos/kratos/v2/log"
 	"gorm.io/gorm"
+	"strings"
 	"time"
 	"user/internal/biz"
 )
@@ -41,6 +42,30 @@ func NewUserRepo(data *Data, logger log.Logger) biz.UserRepo {
 		data: data,
 		log:  log.NewHelper(logger),
 	}
+}
+
+// CheckPassword .
+func (r *userRepo) CheckPassword(ctx context.Context, psd, encryptedPassword string) (bool, error) {
+	options := &password.Options{SaltLen: 16, Iterations: 10000, KeyLen: 32, HashFunction: sha512.New}
+	passwordInfo := strings.Split(encryptedPassword, "$")
+	check := password.Verify(psd, passwordInfo[2], passwordInfo[3], options)
+	return check, nil
+}
+
+func (r *userRepo) UserByMobile(ctx context.Context, mobile string) (*biz.User, error) {
+	var user User
+	result := r.data.db.Table("users").Where(&User{Mobile: mobile}).First(&user)
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		return nil, errors.NotFound("USER_NOT_FOUND", "USER_NOT_FOUND")
+	}
+	if result.Error != nil {
+		return nil, errors.New(500, "FIND_USER_ERROR", "find user error")
+	}
+	if result.RowsAffected == 0 {
+		return nil, errors.NotFound("USER_NOT_FOUND", "user not found")
+	}
+	userInfoRes := modelToResponse(user)
+	return &userInfoRes, nil
 }
 
 // CreateUser .

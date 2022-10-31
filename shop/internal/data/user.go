@@ -49,6 +49,14 @@ func (u *userRepo) UserByMobile(c context.Context, mobile string) (*biz.User, er
 	}, nil
 }
 
+func (u *userRepo) CheckPassword(c context.Context, password, encryptedPassword string) (bool, error) {
+	if byMobile, err := u.data.uc.CheckPassword(c, &userService.PasswordCheckInfo{Password: password, EncryptedPassword: encryptedPassword}); err != nil {
+		return false, err
+	} else {
+		return byMobile.Success, nil
+	}
+}
+
 //func (u *userRepo) CheckPassword(c context.Context, password, encryptedPassword string) (bool, error) {
 //	if byMobile, err := u.data.uc.CheckPassword(c, &userService.PasswordCheckInfo{Password: password, EncryptedPassword: encryptedPassword}); err != nil {
 //		return false, err

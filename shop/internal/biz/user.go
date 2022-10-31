@@ -36,9 +36,9 @@ type User struct {
 
 type UserRepo interface {
 	CreateUser(c context.Context, u *User) (*User, error)
-	//UserByMobile(ctx context.Context, mobile string) (*User, error)
+	UserByMobile(ctx context.Context, mobile string) (*User, error)
+	CheckPassword(ctx context.Context, password, encryptedPassword string) (bool, error)
 	//UserById(ctx context.Context, Id int64) (*User, error)
-	//CheckPassword(ctx context.Context, password, encryptedPassword string) (bool, error)
 	//ListUser(ctx context.Context, pageNum, pageSize int) ([]*User, int, error)
 	//UpdateUser(context.Context, *User) (bool, error)
 }
@@ -95,6 +95,54 @@ func (uc *UserUsecase) CreateUser(ctx context.Context, req *v1.RegisterReq) (*v1
 		Token:     token,
 		ExpiredAt: time.Now().Unix() + 60*60*24*30,
 	}, nil
+}
+
+func (uc *UserUsecase) PassWordLogin(ctx context.Context, req *v1.LoginReq) (*v1.RegisterReply, error) {
+	// 表单验证
+	if len(req.Mobile) <= 0 {
+		return nil, ErrMobileInvalid
+	}
+	if len(req.Password) <= 0 {
+		return nil, ErrUsernameInvalid
+	}
+	// 验证验证码是否正确
+	if !captcha.Store.Verify(req.CaptchaId, req.Captcha, true) {
+		return nil, ErrCaptchaInvalid
+	}
+	if user, err := uc.uRepo.UserByMobile(ctx, req.Mobile); err != nil {
+		return nil, ErrUserNotFound
+	} else {
+		// 用户存在检查密码
+		if passRsp, pasErr := uc.uRepo.CheckPassword(ctx, req.Password, user.Password); pasErr != nil {
+			return nil, ErrPasswordInvalid
+		} else {
+			if passRsp {
+				claims := auth.CustomClaims{
+					ID:          user.ID,
+					NickName:    user.NickName,
+					AuthorityId: user.Role,
+					StandardClaims: jwt2.StandardClaims{
+						NotBefore: time.Now().Unix(),               // 签名的生效时间
+						ExpiresAt: time.Now().Unix() + 60*60*24*30, // 30天过期
+						Issuer:    "Gyl",
+					},
+				}
+				token, err := auth.CreateToken(claims, uc.signingKey)
+				if err != nil {
+					return nil, ErrGenerateTokenFailed
+				}
+				return &v1.RegisterReply{
+					Id:        user.ID,
+					Mobile:    user.Mobile,
+					Username:  user.NickName,
+					Token:     token,
+					ExpiredAt: time.Now().Unix() + 60*60*24*30,
+				}, nil
+			} else {
+				return nil, ErrLoginFailed
+			}
+		}
+	}
 }
 
 func NewUser(mobile, username, password string) (User, error) {
