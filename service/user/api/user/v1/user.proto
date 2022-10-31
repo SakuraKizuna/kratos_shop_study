@@ -20,7 +20,7 @@ service User{
 	rpc UpdateAddress(UpdateAddressReq) returns (CheckResponse) {} // 修改收货地址
 	rpc DefaultAddress(AddressReq) returns (CheckResponse) {} // 设置默认地址
 	rpc DeleteAddress(AddressReq) returns (CheckResponse) {} // 删除收货地址
-
+	rpc GetAddress(AddressReq) returns (AddressInfo) {} // 查询收货地址
 }
 
 message ListAddressReq {
