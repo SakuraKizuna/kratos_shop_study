@@ -2,30 +2,17 @@ package service
 
 import (
 	"context"
+	"go.opentelemetry.io/otel"
 
-	pb "shop/api/shop/v1"
+	v1 "shop/api/shop/v1"
 )
 
-type UserService struct {
-	pb.UnimplementedUserServer
-}
+func (s *ShopService) Register(ctx context.Context, req *v1.RegisterReq) (*v1.RegisterReply, error) {
+	//  add trace
+	tr := otel.Tracer("service")
+	ctx, span := tr.Start(ctx, "get user info by mobile")
+	span.SpanContext()
+	defer span.End()
 
-func NewUserService() *UserService {
-	return &UserService{}
-}
-
-func (s *UserService) CreateUser(ctx context.Context, req *pb.CreateUserRequest) (*pb.CreateUserReply, error) {
-	return &pb.CreateUserReply{}, nil
-}
-func (s *UserService) UpdateUser(ctx context.Context, req *pb.UpdateUserRequest) (*pb.UpdateUserReply, error) {
-	return &pb.UpdateUserReply{}, nil
-}
-func (s *UserService) DeleteUser(ctx context.Context, req *pb.DeleteUserRequest) (*pb.DeleteUserReply, error) {
-	return &pb.DeleteUserReply{}, nil
-}
-func (s *UserService) GetUser(ctx context.Context, req *pb.GetUserRequest) (*pb.GetUserReply, error) {
-	return &pb.GetUserReply{}, nil
-}
-func (s *UserService) ListUser(ctx context.Context, req *pb.ListUserRequest) (*pb.ListUserReply, error) {
-	return &pb.ListUserReply{}, nil
+	return s.uc.CreateUser(ctx, req)
 }
