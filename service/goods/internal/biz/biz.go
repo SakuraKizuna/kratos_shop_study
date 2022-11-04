@@ -6,7 +6,7 @@ import (
 )
 
 // ProviderSet is biz providers.
-var ProviderSet = wire.NewSet(NewCategoryUsecase)
+var ProviderSet = wire.NewSet(NewBrandUsecase, NewCategoryUsecase, NewGoodsTypeUsecase)
 
 // Transaction 新增事务接口方法
 type Transaction interface {

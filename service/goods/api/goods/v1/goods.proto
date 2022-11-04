@@ -3,11 +3,14 @@ syntax = "proto3";
 package goods.v1;
 
 import "google/protobuf/empty.proto";
+import "validate/validate.proto";
 
 option go_package = "goods/api/goods/v1;v1";
 
 service Goods {
   rpc CreateCategory(CategoryInfoRequest) returns(CategoryInfoResponse);
+  // 商品类型基本信息创建
+  rpc CreateGoodsType(GoodsTypeRequest) returns(GoodsTypeResponse);
 }
 
 message CategoryInfoRequest {
@@ -26,4 +29,19 @@ message CategoryInfoResponse {
   int32 level = 4;
   bool isTab = 5;
   int32 sort = 6;
+}
+
+
+message GoodsTypeRequest {
+  int64 id = 1;
+  string name = 2 [(validate.rules).string.min_len =  3];;
+  string typeCode = 3 [(validate.rules).string.min_len =  3];;
+  string nameAlias = 4;
+  bool isVirtual = 5;
+  string desc = 6;
+  int32 sort = 7;
+}
+
+message GoodsTypeResponse {
+  int64 id = 1;
 }

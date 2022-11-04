@@ -22,8 +22,10 @@ import (
 // ProviderSet is data providers.
 var ProviderSet = wire.NewSet(
 	NewData,
-	NewDB, NewTransaction, NewRedis, NewElasticsearch,
+	NewDB, NewTransaction, NewRedis,
+	NewBrandRepo,
 	NewCategoryRepo,
+	NewGoodsTypeRepo,
 )
 
 type Data struct {
@@ -36,14 +38,13 @@ type Data struct {
 type contextTxKey struct{}
 
 // NewData .
-func NewData(c *conf.Data, logger log.Logger, db *gorm.DB, rdb *redis.Client, es *elastic.Client) (*Data, func(), error) {
+func NewData(c *conf.Data, logger log.Logger, db *gorm.DB, rdb *redis.Client) (*Data, func(), error) {
 	cleanup := func() {
 		log.NewHelper(logger).Info("closing the data resources")
 	}
 	return &Data{
-		db:       db,
-		rdb:      rdb,
-		EsClient: es,
+		db:  db,
+		rdb: rdb,
 	}, cleanup, nil
 }
 
@@ -112,14 +113,4 @@ func NewRedis(c *conf.Data) *redis.Client {
 		log.Error(err)
 	}
 	return rdb
-}
-
-func NewElasticsearch(c *conf.Data) *elastic.Client {
-	es, err := elastic.NewClient(elastic.SetURL(c.Elastic.Addr), elastic.SetSniff(false),
-		elastic.SetTraceLog(slog.New(os.Stdout, "shop", slog.LstdFlags)))
-	if err != nil {
-		panic(any(err))
-	}
-
-	return es
 }

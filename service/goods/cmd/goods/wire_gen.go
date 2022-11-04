@@ -22,8 +22,7 @@ import (
 func initApp(confServer *conf.Server, registry *conf.Registry, confData *conf.Data, logger log.Logger) (*kratos.App, func(), error) {
 	db := data.NewDB(confData)
 	client := data.NewRedis(confData)
-	elasticClient := data.NewElasticsearch(confData)
-	dataData, cleanup, err := data.NewData(confData, logger, db, client, elasticClient)
+	dataData, cleanup, err := data.NewData(confData, logger, db, client)
 	if err != nil {
 		return nil, nil, err
 	}

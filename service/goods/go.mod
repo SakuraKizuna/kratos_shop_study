@@ -3,6 +3,7 @@ module goods
 go 1.19
 
 require (
+	github.com/envoyproxy/protoc-gen-validate v0.1.0
 	github.com/go-kratos/kratos/contrib/registry/consul/v2 v2.0.0-20221102101533-2a65502be27b
 	github.com/go-kratos/kratos/v2 v2.5.2
 	github.com/go-redis/redis/extra/redisotel v0.3.0

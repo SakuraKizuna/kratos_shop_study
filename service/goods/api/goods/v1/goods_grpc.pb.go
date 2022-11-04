@@ -23,6 +23,8 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type GoodsClient interface {
 	CreateCategory(ctx context.Context, in *CategoryInfoRequest, opts ...grpc.CallOption) (*CategoryInfoResponse, error)
+	// 商品类型基本信息创建
+	CreateGoodsType(ctx context.Context, in *GoodsTypeRequest, opts ...grpc.CallOption) (*GoodsTypeResponse, error)
 }
 
 type goodsClient struct {
@@ -42,11 +44,22 @@ func (c *goodsClient) CreateCategory(ctx context.Context, in *CategoryInfoReques
 	return out, nil
 }
 
+func (c *goodsClient) CreateGoodsType(ctx context.Context, in *GoodsTypeRequest, opts ...grpc.CallOption) (*GoodsTypeResponse, error) {
+	out := new(GoodsTypeResponse)
+	err := c.cc.Invoke(ctx, "/goods.v1.Goods/CreateGoodsType", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // GoodsServer is the server API for Goods service.
 // All implementations must embed UnimplementedGoodsServer
 // for forward compatibility
 type GoodsServer interface {
 	CreateCategory(context.Context, *CategoryInfoRequest) (*CategoryInfoResponse, error)
+	// 商品类型基本信息创建
+	CreateGoodsType(context.Context, *GoodsTypeRequest) (*GoodsTypeResponse, error)
 	mustEmbedUnimplementedGoodsServer()
 }
 
@@ -56,6 +69,9 @@ type UnimplementedGoodsServer struct {
 
 func (UnimplementedGoodsServer) CreateCategory(context.Context, *CategoryInfoRequest) (*CategoryInfoResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateCategory not implemented")
+}
+func (UnimplementedGoodsServer) CreateGoodsType(context.Context, *GoodsTypeRequest) (*GoodsTypeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateGoodsType not implemented")
 }
 func (UnimplementedGoodsServer) mustEmbedUnimplementedGoodsServer() {}
 
@@ -88,6 +104,24 @@ func _Goods_CreateCategory_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Goods_CreateGoodsType_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GoodsTypeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GoodsServer).CreateGoodsType(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/goods.v1.Goods/CreateGoodsType",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GoodsServer).CreateGoodsType(ctx, req.(*GoodsTypeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Goods_ServiceDesc is the grpc.ServiceDesc for Goods service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -98,6 +132,10 @@ var Goods_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateCategory",
 			Handler:    _Goods_CreateCategory_Handler,
+		},
+		{
+			MethodName: "CreateGoodsType",
+			Handler:    _Goods_CreateGoodsType_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
