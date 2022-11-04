@@ -1,6 +1,6 @@
 module goods
 
-go 1.17
+go 1.19
 
 require (
 	github.com/go-kratos/kratos/contrib/registry/consul/v2 v2.0.0-20221102101533-2a65502be27b
