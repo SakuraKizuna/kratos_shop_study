@@ -2,12 +2,14 @@ package service
 
 import (
 	"context"
+	"fmt"
 	v1 "goods/api/goods/v1"
 	"goods/internal/biz"
 )
 
 // CreateCategory 创建分类
 func (g *GoodsService) CreateCategory(ctx context.Context, r *v1.CategoryInfoRequest) (*v1.CategoryInfoResponse, error) {
+	fmt.Println(111)
 	result, err := g.cac.CreateCategory(ctx, &biz.CategoryInfo{
 		Name:           r.Name,
 		ParentCategory: r.ParentCategory,
