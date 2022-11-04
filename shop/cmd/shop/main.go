@@ -8,7 +8,7 @@ import (
 	"github.com/go-kratos/kratos/v2/config"
 	"github.com/go-kratos/kratos/v2/config/file"
 	"github.com/go-kratos/kratos/v2/log"
-	"github.com/go-kratos/kratos/v2/middleware/tracing"
+	//"github.com/go-kratos/kratos/v2/middleware/tracing"
 	"github.com/go-kratos/kratos/v2/registry"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
@@ -21,6 +21,7 @@ import (
 	semconv "go.opentelemetry.io/otel/semconv/v1.7.0"
 
 	"shop/internal/conf"
+	logs "shop/internal/pkg/logs"
 )
 
 // go build -ldflags "-X main.Version=x.y.z"
@@ -56,15 +57,15 @@ func newApp(logger log.Logger, hs *http.Server, gs *grpc.Server, rr registry.Reg
 
 func main() {
 	flag.Parse()
-	logger := log.With(log.NewStdLogger(os.Stdout),
-		"ts", log.DefaultTimestamp,
-		"caller", log.DefaultCaller,
-		"service.id", id,
-		"service.name", Name,
-		"service.version", Version,
-		"trace_id", tracing.TraceID(),
-		"span_id", tracing.SpanID(),
-	)
+	//logger := log.With(log.NewStdLogger(os.Stdout),
+	//	"ts", log.DefaultTimestamp,
+	//	"caller", log.DefaultCaller,
+	//	"service.id", id,
+	//	"service.name", Name,
+	//	"service.version", Version,
+	//	"trace_id", tracing.TraceID(),
+	//	"span_id", tracing.SpanID(),
+	//)
 	c := config.New(
 		config.WithSource(
 			file.NewSource(flagconf),
@@ -91,7 +92,7 @@ func main() {
 		panic(any(err))
 	}
 
-	app, cleanup, err := initApp(bc.Server, bc.Data, bc.Auth, bc.Service, &rc, logger)
+	app, cleanup, err := initApp(bc.Server, bc.Data, bc.Auth, bc.Service, &rc, logs.Logger())
 	if err != nil {
 		panic(any(err))
 	}
