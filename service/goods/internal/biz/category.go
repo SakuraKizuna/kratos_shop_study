@@ -2,7 +2,6 @@ package biz
 
 import (
 	"context"
-	"fmt"
 	"github.com/go-kratos/kratos/v2/log"
 )
 
@@ -39,7 +38,6 @@ func NewCategoryUsecase(repo CategoryRepo, logger log.Logger) *CategoryUsecase {
 }
 
 func (c *CategoryUsecase) CreateCategory(ctx context.Context, r *CategoryInfo) (*CategoryInfo, error) {
-	fmt.Println(222)
 	cateInfo, err := c.repo.AddCategory(ctx, r)
 	if err != nil {
 		return nil, err
