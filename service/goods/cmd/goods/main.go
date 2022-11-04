@@ -42,7 +42,7 @@ func newApp(logger log.Logger, gs *grpc.Server, rr registry.Registrar) *kratos.A
 		kratos.ID(id),
 		kratos.Name(Name),
 		kratos.Version(Version),
-		kratos.Metadata(map[string]string{}),
+		kratos.Metadata(map[string]string{"test_key": "test_val"}),
 		kratos.Logger(logger),
 		kratos.Server(
 			gs,
