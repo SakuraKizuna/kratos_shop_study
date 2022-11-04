@@ -96,6 +96,8 @@ func NewDB(c *conf.Data) *gorm.DB {
 		panic(any("failed to connect database"))
 	}
 
+	//db.AutoMigrate(&Brand{}, &Category{}, &GoodsType{})
+
 	return db
 }
 
