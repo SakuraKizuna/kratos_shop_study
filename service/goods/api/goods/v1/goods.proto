@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package api.goods.v1;
+
+option go_package = "goods/api/goods/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.goods.v1";
+
+service Goods {
+	rpc CreateGoods (CreateGoodsRequest) returns (CreateGoodsReply);
+	rpc UpdateGoods (UpdateGoodsRequest) returns (UpdateGoodsReply);
+	rpc DeleteGoods (DeleteGoodsRequest) returns (DeleteGoodsReply);
+	rpc GetGoods (GetGoodsRequest) returns (GetGoodsReply);
+	rpc ListGoods (ListGoodsRequest) returns (ListGoodsReply);
+}
+
+message CreateGoodsRequest {}
+message CreateGoodsReply {}
+
+message UpdateGoodsRequest {}
+message UpdateGoodsReply {}
+
+message DeleteGoodsRequest {}
+message DeleteGoodsReply {}
+
+message GetGoodsRequest {}
+message GetGoodsReply {}
+
+message ListGoodsRequest {}
+message ListGoodsReply {}
