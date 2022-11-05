@@ -75,6 +75,8 @@ func NewDB(c *conf.Data) *gorm.DB {
 		},
 	})
 
+	db.AutoMigrate(&User{})
+
 	if err != nil {
 		log.Errorf("failed opening connection to sqlite: %v", err)
 		panic(any("failed to connect database"))
