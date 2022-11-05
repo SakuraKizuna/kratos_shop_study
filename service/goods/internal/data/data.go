@@ -96,6 +96,7 @@ func NewDB(c *conf.Data) *gorm.DB {
 		},
 	})
 
+	db.AutoMigrate(&BaseFields{}, &Brand{}, &Category{}, &GoodsType{}, &Goods{}, &GoodsAttrGroup{}, &GoodsAttr{}, &GoodsAttrValue{}, &GoodsSku{}, &GoodsSpecificationSku{}, &GoodsInventory{}, &SpecificationsAttr{}, &SpecificationsAttrValue{})
 	if err != nil {
 		log.Errorf("failed opening connection to sqlite: %v", err)
 		panic(any("failed to connect database"))
