@@ -2,6 +2,7 @@ package data
 
 import (
 	"context"
+	"errors"
 	"github.com/go-kratos/kratos/v2/log"
 	"goods/internal/biz"
 	"goods/internal/domain"
@@ -50,4 +51,22 @@ func (g *goodsTypeRepo) CreateGoodsType(ctx context.Context, req *domain.GoodsTy
 	}
 	result := g.data.db.Save(goodsType)
 	return goodsType.ID, result.Error
+}
+
+func (g *goodsTypeRepo) IsExistsByID(ctx context.Context, typeID int64) (*domain.GoodsType, error) {
+	var goodsType GoodsType
+	if res := g.data.db.First(&goodsType, typeID); res.RowsAffected == 0 {
+		return nil, errors.New("商品类型不存在")
+	}
+
+	res := &domain.GoodsType{
+		ID:        goodsType.ID,
+		Name:      goodsType.Name,
+		TypeCode:  goodsType.TypeCode,
+		NameAlias: goodsType.NameAlias,
+		IsVirtual: goodsType.IsVirtual,
+		Desc:      goodsType.Desc,
+		Sort:      goodsType.Sort,
+	}
+	return res, nil
 }

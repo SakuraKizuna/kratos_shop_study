@@ -8,6 +8,7 @@ import (
 
 type GoodsTypeRepo interface {
 	CreateGoodsType(context.Context, *domain.GoodsType) (int64, error)
+	IsExistsByID(context.Context, int64) (*domain.GoodsType, error)
 }
 
 type GoodsTypeUsecase struct {
