@@ -12,16 +12,27 @@ var ProviderSet = wire.NewSet(NewGoodsService)
 
 type GoodsService struct {
 	v1.UnimplementedGoodsServer
-	cac *biz.CategoryUsecase
-	bc  *biz.BrandUsecase
-	gt  *biz.GoodsTypeUsecase
-	s   *biz.SpecificationUsecase
-	ga  *biz.GoodsAttrUsecase
-	g   *biz.GoodsUsecase
-	log *log.Helper
+	cac     *biz.CategoryUsecase
+	bc      *biz.BrandUsecase
+	gt      *biz.GoodsTypeUsecase
+	s       *biz.SpecificationUsecase
+	ga      *biz.GoodsAttrUsecase
+	g       *biz.GoodsUsecase
+	esGoods *biz.EsGoodsUsecase
+	log     *log.Helper
 }
 
-// NewGoodsService new a greeter service.
-func NewGoodsService(cac *biz.CategoryUsecase, logger log.Logger) *GoodsService {
-	return &GoodsService{cac: cac, log: log.NewHelper(logger)}
+// NewGoodsService new a goods service.
+func NewGoodsService(bc *biz.BrandUsecase, cac *biz.CategoryUsecase, gt *biz.GoodsTypeUsecase, s *biz.SpecificationUsecase,
+	ga *biz.GoodsAttrUsecase, gc *biz.GoodsUsecase, esGoods *biz.EsGoodsUsecase, logger log.Logger) *GoodsService {
+	return &GoodsService{
+		bc:      bc,
+		cac:     cac,
+		gt:      gt,
+		s:       s,
+		ga:      ga,
+		g:       gc,
+		esGoods: esGoods,
+		log:     log.NewHelper(logger),
+	}
 }

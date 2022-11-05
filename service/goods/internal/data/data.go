@@ -22,7 +22,7 @@ import (
 // ProviderSet is data providers.
 var ProviderSet = wire.NewSet(
 	NewData,
-	NewDB, NewTransaction, NewRedis,
+	NewDB, NewTransaction, NewRedis, NewElasticsearch,
 	NewBrandRepo,
 	NewCategoryRepo,
 	NewGoodsTypeRepo,
@@ -31,6 +31,7 @@ var ProviderSet = wire.NewSet(
 	NewGoodsRepo,
 	NewGoodsSkuRepoRepo,
 	NewInventoryRepo,
+	NewEsGoodsRepo,
 )
 
 type Data struct {
@@ -121,4 +122,14 @@ func NewRedis(c *conf.Data) *redis.Client {
 		log.Error(err)
 	}
 	return rdb
+}
+
+func NewElasticsearch(c *conf.Data) *elastic.Client {
+	es, err := elastic.NewClient(elastic.SetURL(c.Elastic.Addr), elastic.SetSniff(false),
+		elastic.SetTraceLog(slog.New(os.Stdout, "shop", slog.LstdFlags)))
+	if err != nil {
+		panic(any(err))
+	}
+
+	return es
 }
