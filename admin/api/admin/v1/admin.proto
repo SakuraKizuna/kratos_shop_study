@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package api.admin.v1;
+
+option go_package = "admin/api/admin/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.admin.v1";
+
+service Admin {
+	rpc CreateAdmin (CreateAdminRequest) returns (CreateAdminReply);
+	rpc UpdateAdmin (UpdateAdminRequest) returns (UpdateAdminReply);
+	rpc DeleteAdmin (DeleteAdminRequest) returns (DeleteAdminReply);
+	rpc GetAdmin (GetAdminRequest) returns (GetAdminReply);
+	rpc ListAdmin (ListAdminRequest) returns (ListAdminReply);
+}
+
+message CreateAdminRequest {}
+message CreateAdminReply {}
+
+message UpdateAdminRequest {}
+message UpdateAdminReply {}
+
+message DeleteAdminRequest {}
+message DeleteAdminReply {}
+
+message GetAdminRequest {}
+message GetAdminReply {}
+
+message ListAdminRequest {}
+message ListAdminReply {}
