@@ -12,11 +12,13 @@ var ProviderSet = wire.NewSet(NewGoodsService)
 
 type GoodsService struct {
 	v1.UnimplementedGoodsServer
-
 	cac *biz.CategoryUsecase
-	log *log.Helper
+	bc  *biz.BrandUsecase
+	gt  *biz.GoodsTypeUsecase
 	s   *biz.SpecificationUsecase
 	ga  *biz.GoodsAttrUsecase
+	g   *biz.GoodsUsecase
+	log *log.Helper
 }
 
 // NewGoodsService new a greeter service.

@@ -156,3 +156,16 @@ func (g *goodsAttrRepo) CreateGoodsAttrValue(ctx context.Context, r []*domain.Go
 	}
 	return res, nil
 }
+
+func (g *goodsAttrRepo) ListByIds(ctx context.Context, ids ...int64) (domain.GoodsAttrList, error) {
+	var l []*GoodsAttr
+	if err := g.data.DB(ctx).Where("id IN (?)", ids).Find(&l).Error; err != nil {
+		return nil, errors.New("属性不存在")
+	}
+
+	var res domain.GoodsAttrList
+	for _, item := range l {
+		res = append(res, item.ToDomain())
+	}
+	return res, nil
+}

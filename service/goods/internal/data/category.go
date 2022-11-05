@@ -73,3 +73,20 @@ func (r *CategoryRepo) AddCategory(ctx context.Context, req *biz.CategoryInfo) (
 	}
 	return res, nil
 }
+
+func (r *CategoryRepo) GetCategoryByID(ctx context.Context, id int32) (*biz.CategoryInfo, error) {
+	var categories Category
+	if res := r.data.db.First(&categories, id); res.RowsAffected == 0 {
+		return nil, errors.New("商品分类不存在")
+	}
+
+	info := &biz.CategoryInfo{
+		ID:             categories.ID,
+		Name:           categories.Name,
+		ParentCategory: categories.ParentCategoryID,
+		Level:          categories.Level,
+		IsTab:          categories.IsTab,
+		Sort:           categories.Sort,
+	}
+	return info, nil
+}

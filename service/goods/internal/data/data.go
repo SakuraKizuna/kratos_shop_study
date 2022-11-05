@@ -26,6 +26,11 @@ var ProviderSet = wire.NewSet(
 	NewBrandRepo,
 	NewCategoryRepo,
 	NewGoodsTypeRepo,
+	NewSpecificationRepo,
+	NewGoodsAttrRepo,
+	NewGoodsRepo,
+	NewGoodsSkuRepoRepo,
+	NewInventoryRepo,
 )
 
 type Data struct {

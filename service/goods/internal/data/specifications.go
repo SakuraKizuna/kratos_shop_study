@@ -78,3 +78,28 @@ func (g *specificationRepo) CreateSpecificationValue(ctx context.Context, AttrId
 	result := g.data.DB(ctx).Create(&value)
 	return result.Error
 }
+
+func (g *specificationRepo) ListByIds(ctx context.Context, id ...*int64) (domain.SpecificationList, error) {
+	var l []*SpecificationsAttr
+	if err := g.data.DB(ctx).Where("id IN (?)", id).Find(&l).Error; err != nil {
+		return nil, err
+	}
+
+	var res domain.SpecificationList
+	for _, item := range l {
+		res = append(res, item.ToDomain())
+	}
+	return res, nil
+}
+
+func (p *SpecificationsAttr) ToDomain() *domain.Specification {
+	return &domain.Specification{
+		ID:       p.ID,
+		TypeID:   p.TypeID,
+		Name:     p.Name,
+		Sort:     p.Sort,
+		Status:   p.Status,
+		IsSKU:    p.IsSKU,
+		IsSelect: p.IsSelect,
+	}
+}
