@@ -32,9 +32,9 @@ config:
  	       --go_out=paths=source_relative:./internal \
 	       $(INTERNAL_PROTO_FILES)
 
-.PHONY: api
+.PHONY: api2
 # generate api proto
-api:
+api2:
 	protoc --proto_path=./api \
 	       --proto_path=./third_party \
  	       --go_out=paths=source_relative:./api \
@@ -42,6 +42,19 @@ api:
  	       --go-grpc_out=paths=source_relative:./api \
 	       --openapi_out=fq_schema_naming=true,default_response=false:. \
 	       $(API_PROTO_FILES)
+
+.PHONY: api
+# generate api proto
+api:
+	protoc --proto_path=. \
+	       --proto_path=./third_party \
+ 	       --go_out=paths=source_relative:. \
+ 	       --go-http_out=paths=source_relative:. \
+ 	       --go-grpc_out=paths=source_relative:. \
+ 	       --openapi_out==paths=source_relative:. \
+ 	       --validate_out=paths=source_relative,lang=go:. \
+	       $(API_PROTO_FILES)
+
 
 .PHONY: build
 # build
