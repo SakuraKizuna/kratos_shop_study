@@ -1,6 +1,6 @@
 module admin
 
-go 1.17
+go 1.19
 
 require (
 	github.com/envoyproxy/protoc-gen-validate v0.1.0
