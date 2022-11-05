@@ -16,6 +16,7 @@ type GoodsService struct {
 	cac *biz.CategoryUsecase
 	log *log.Helper
 	s   *biz.SpecificationUsecase
+	ga  *biz.GoodsAttrUsecase
 }
 
 // NewGoodsService new a greeter service.
