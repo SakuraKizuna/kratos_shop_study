@@ -9,6 +9,9 @@ import (
 
 // CreateUser create a user
 func (u *UserService) CreateUser(ctx context.Context, req *v1.CreateUserInfo) (*v1.UserInfoResponse, error) {
+	tr := otel.Tracer("user service")
+	ctx, span := tr.Start(ctx, "CreateUser Service Start")
+	defer span.End()
 	user, err := u.uc.Create(ctx, &biz.User{
 		Mobile:   req.Mobile,
 		Password: req.Password,

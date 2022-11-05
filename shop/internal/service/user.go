@@ -11,7 +11,7 @@ import (
 func (s *ShopService) Register(ctx context.Context, req *v1.RegisterReq) (*v1.RegisterReply, error) {
 	//  add trace
 	tr := otel.Tracer("service")
-	ctx, span := tr.Start(ctx, "Register")
+	ctx, span := tr.Start(ctx, "Register Start")
 	span.SpanContext()
 	defer span.End()
 
