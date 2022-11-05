@@ -14,5 +14,7 @@ data:
     dial_timeout: 1s
     read_timeout: 0.2s
     write_timeout: 0.2s
+  elastic:
+    addr: http://192.168.33.131:9200
 trace:
   endpoint: http://192.168.33.131:14268/api/traces
