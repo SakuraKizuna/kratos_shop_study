@@ -103,8 +103,7 @@ func (uc *UserUsecase) PassWordLogin(ctx context.Context, req *v1.LoginReq) (*v1
 	//if !captcha.Store.Verify(req.CaptchaId, req.Captcha, true) {
 	//	return nil, ErrCaptchaInvalid
 	//}
-	mobile := "13501167215"
-	if user, err := uc.uRepo.UserByMobile(ctx, mobile); err != nil {
+	if user, err := uc.uRepo.UserByMobile(ctx, req.Username); err != nil {
 		return nil, ErrUserNotFound
 	} else {
 		// 用户存在检查密码
