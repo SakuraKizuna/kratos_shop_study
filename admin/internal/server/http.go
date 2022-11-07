@@ -13,6 +13,7 @@ import (
 	"github.com/go-kratos/kratos/v2/middleware/tracing"
 	"github.com/go-kratos/kratos/v2/middleware/validate"
 	"github.com/go-kratos/kratos/v2/transport/http"
+	"github.com/go-kratos/swagger-api/openapiv2"
 	jwt2 "github.com/golang-jwt/jwt/v4"
 	"github.com/gorilla/handlers"
 )
@@ -20,6 +21,7 @@ import (
 // NewHTTPServer new an HTTP s.
 func NewHTTPServer(c *conf.Server, ac *conf.Auth, s *service.AdminService, logger log.Logger) *http.Server {
 	var opts = []http.ServerOption{
+
 		http.Middleware(
 			recovery.Recovery(),
 			validate.Validator(),
@@ -47,6 +49,8 @@ func NewHTTPServer(c *conf.Server, ac *conf.Auth, s *service.AdminService, logge
 		opts = append(opts, http.Timeout(c.Http.Timeout.AsDuration()))
 	}
 	srv := http.NewServer(opts...)
+	openAPIhandler := openapiv2.NewHandler()
+	srv.HandlePrefix("/q/", openAPIhandler)
 	v1.RegisterAdminHTTPServer(srv, s)
 	return srv
 }

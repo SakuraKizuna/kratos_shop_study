@@ -68,6 +68,14 @@ func main() {
 			file.NewSource(flagconf),
 		),
 	)
+
+	//if err := c.Watch("name", func(key string, value config.Value) {
+	//	fmt.Printf("config changed: %s = %v\n", key, value)
+	//	// 在这里写回调的逻辑
+	//}); err != nil {
+	//	log.Error(err)
+	//}
+
 	defer c.Close()
 
 	if err := c.Load(); err != nil {
