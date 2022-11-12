@@ -52,7 +52,6 @@ api:
  	       --go-http_out=paths=source_relative:. \
  	       --go-grpc_out=paths=source_relative:. \
  	       --openapi_out==paths=source_relative:. \
- 	       --validate_out=paths=source_relative,lang=go:. \
 	       $(API_PROTO_FILES)
 
 
